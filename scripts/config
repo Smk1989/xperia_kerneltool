@@ -1,0 +1,8 @@
+#!/bin/bash
+export directory_name=
+export codename=
+export kerneldir_name=pikachu/pikachu
+export config_name=
+export toolchain=
+
+

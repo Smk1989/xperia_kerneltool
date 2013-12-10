@@ -1,0 +1,82 @@
+#!/bin/bash
+clear
+echo "=============================================="
+echo 
+echo "******* Welcome to Xperia-kerneltools **************"
+echo
+source ~/xperia_kerneltool/scripts/config
+cp ~/xperia_kerneltool/bin/* $HOME/bin
+echo "Reading config................"
+echo "Current kernel work directory = $kerneldir_name"
+echo
+echo "******* Please select what you want to do ********"
+echo
+echo "1 - Define/change work directory for your kernel "
+echo
+echo "2 - To work on Sony kernel"
+echo
+echo "3 - Download toolchains"
+echo
+echo "4 - Unpack boot.img to get zImage and Ramdisk"
+echo 
+echo "5 - Unpack or Repack ramdisk"
+echo
+echo "6 - Build zImage for a generic kernel(Experimental)"
+echo
+echo "7 - Backup TA partition for Sony or EFS partition on samsung"
+echo
+echo "8 - Update tool or Donate to me "
+echo
+echo "9 - Exit"
+read input
+case $input in
+1) clear
+   echo "--------Before you proceed please create a work directory for your files-------"
+   echo 
+   echo "You can create nested directories(for eg:android/system).Enter the directory name in the same format given below"
+   echo
+   echo "Directory name for one directory under home folder or parent directory/child directory/...)"
+   echo "***************************************************************************************"
+   read kerneldir_name
+   mkdir -p ~/$kerneldir_name
+   TARGET_KEY="kerneldir_name"
+   REPLACEMENT_VALUE="$kerneldir_name"
+   sed -i "s@\($TARGET_KEY *= *\).*@\1$REPLACEMENT_VALUE@" ~/xperia_kerneltool/scripts/config
+   ./menu;;
+2)./kernel-tools/Sony;;
+3)echo "A few toolchains will be downloaded"
+  echo "Press enter to continue"
+  read enterkey
+  cd
+  git clone https://github.com/Smk1989/android_toolchains.git
+  echo "Press enter to continue"
+  read enterkey;; 
+4)clear
+echo "Place boot.img in the input folder of the tool"
+echo
+echo "Press Enter to continue"
+read enterkey
+cd ~/xperia_kerneltool/input
+unpack-bootimg.pl boot.img
+rm *.img
+mv ~/xperia_kerneltool/input/* ~/xperia_kerneltool/output
+echo "Done..please find your extracted zImage and ramdisk in the output folder of the tool(press enter)"
+read enterkey;;
+5)./kernel-tools/unpack_repack;;
+6)clear
+  echo "Please enter a new defconfig name"
+  read config_name
+  TARGET_KEY="config_name"
+  REPLACEMENT_VALUE="$config_name"
+  sed -i "s@\($TARGET_KEY *= *\).*@\1$REPLACEMENT_VALUE@" ~/xperia_kerneltool/scripts/config
+. ~/xperia_kerneltool/kernel-tools/toolchain_selector
+echo "Press enter to continue with defconfig and toolchain selected"
+read enterkey;;
+7)./scripts/backup;;
+8)./scripts/update_donate;;
+esac
+
+  
+   
+   
+   

@@ -1,0 +1,29 @@
+#!/bin/bash
+export root=$(cd $(dirname "$0");pwd)
+export multitools=$root/backup
+echo "========= Welcome to TA partition backup========"
+echo
+echo "Please note that TA partition restore option has not been provided with the tool"
+echo
+echo "Press enter to proceed"
+read enterkey
+clear
+echo "1 - Backup TA partition for Sony"
+read input
+case $input in
+1)./Backup/TA_backup;;
+esac
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+

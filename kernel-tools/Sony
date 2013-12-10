@@ -1,0 +1,71 @@
+#!/bin/bash
+clear
+export root=$(cd $(dirname "$0");pwd)
+export multitools=$root/Sony
+source ~/xperia_kerneltool/scripts/config
+export PATH=$PATH:$HOME/bin
+echo "----------Sony Kernel Tools----------"
+echo 
+echo "What would you like to do??????"
+echo
+echo "1-Download libraries"
+echo
+echo "2-Unpack Kernel Source"
+echo
+echo "3-Extract kernel.sin file from ftf file"
+echo
+echo "4-Extract kernel.sin file to get zImage & Ramdisk"
+echo
+echo "5-Compile Zimage from source"
+echo
+echo "6-Make dt.img(for xperia z1 and z ultra)"
+echo
+echo "7-Make kernel.elf or boot.img from zImage and Ramdisk"
+echo
+echo "8-Exit"
+read input
+case $input in
+1). ~/xperia_kerneltool/kernel-tools/import_lib;;
+2)clear
+  echo "Please place a copy of the downloaded source tar.bz2 file in the input folder of the tool"
+  echo "Press Enter to proceed with unpacking"
+  cd ~/xperia_kerneltool/input
+  tar -xjvf *.bz2 -C ~/$kerneldir_name
+  rm *.bz2
+  echo "Please find the unpacked source in your kernel work directory"
+  echo "Press enter to continue"
+  read enterkey;;
+3)clear
+  echo "Place a copy of the ftf file in your kernel work directory"
+  echo
+  echo "Press enter to extract kernel.sin"
+  read enterkey
+  cd ~/$kerneldir_name
+  unzip *.ftf kernel.sin
+  echo "Please find kernel.sin in your kernel work directory"
+  echo "Press enter to continue"
+  read enterkey;;
+4)clear
+  echo "Place kernel.sin in your kernel work directory"
+  echo
+  echo "Press enter to unpack kernel.sin"
+  read enterkey
+  cd ~/$kerneldir_name
+  unpack-kernelsin.pl kernel.sin 
+  echo "Please find zimage and ramdisk from kernel.sin in your kernel work directory"
+  echo "Press enter to continue"
+  read enterkey;;
+5)clear
+echo "Please maximize your terminal window before proceeding(Press Enter)"
+read enterkey
+./kernel-tools/Sony_buildzimage;;  
+6)clear
+echo "generating device tree..."
+dtbTool -o dt.img -s 2048 -p ~/$kerneldir_name/kernel/scripts/dtc/ ~/$kerneldir_name/kernel/arch/arm/boot/
+echo "Please find dt.img in arch/arm/boot folder of your kernel source folder(Press Enter to continue)"
+read enterkey;;
+7)./kernel-tools/Sony_build;;
+8)./scripts/kernel_menu;;
+esac
+$multitools
+  
